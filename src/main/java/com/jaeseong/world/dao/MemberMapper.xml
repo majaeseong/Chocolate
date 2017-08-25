@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jaeseong.world.dao.MemberMapper">
+
+	<insert id="member_join" parameterType="MemberDTO">
+		insert into member(id,pwd,name,addr) values(#{id}, #{pwd}, #{name},#{addr})
+	</insert>
+	
+	<select id="member_one_sel" parameterType="MemberDTO" resultType="MemberDTO">
+		select * from member where id=#{id} and useyn=0
+	</select>
+	
+	<select id="product_one_sel" parameterType="int" resultType="ProductDTO">
+		select * from product where id=#{id}
+	</select>
+	
+	<select id="product_all_sel_onsel" resultType="ProductDTO" parameterType="PagingDTO">
+		select * from product where useyn=0 
+		<if test='keyword != null and keyword!=""'>
+			and name like CONCAT('%',#{keyword},'%')
+		</if>
+		limit #{startNum},#{offset}
+	</select>
+	
+	<insert id="addtocart" parameterType="CartDTO">
+		insert into cart(memid,productid,amount) values(#{memid},#{productid},#{amount})
+	</insert>
+	
+	<select id="cookiee" parameterType="CookieDTO" resultType="ProductDTO">
+	select * from product
+		<where>
+			<if test="ar2 == null">
+				id=9999
+			</if>
+			<if test="ar2 !=null">
+				or id=#{ar2}
+			</if>
+			<if test="ar3 !=null">
+				or id=#{ar3}
+			</if>
+			<if test="ar4 !=null">
+				or id=#{ar4}
+			</if>
+		</where>
+	</select> 
+	
+	<select id="same_category" parameterType="ProductDTO" resultType="ProductDTO">
+		select * from product where category=#{category} and id not in (#{id}) order by regtime desc limit 4
+	</select>
+	
+	<select id="getCart" parameterType="MemberDTO" resultType="CartViewDTO">
+		select product.id as productid,product.image as image,cart.id as id, product.name as name, cart.amount as amount, product.price as price 
+		from cart
+		join product on cart.productid = product.id
+		and cart.cheory=0
+		and memid=#{id}
+	</select>
+	
+	<update id="changeamount" parameterType="CartDTO">
+		update cart set amount=#{amount} where id=#{id}
+	</update>
+	
+	<update id="cartCheory" parameterType="String">
+		update cart set cheory=1 where id=#{orderlist}
+	</update>
+	
+	<insert id="addOrder" parameterType="OrderDTO" useGeneratedKeys="true" keyProperty="id">
+		insert into order_(memid,totalprice,addr) values(#{memid}, #{totalprice},#{addr})
+	</insert>
+	
+	<select id="cart_id" parameterType="String" resultType="CartDTO">
+		select * from cart where id=#{orderlist}
+	</select>
+	
+	<insert id="addOrder_detail" parameterType="OrderDetailDTO">
+		insert into order_detail(orderid,pid,amount) 
+		values(#{orderid},#{pid},#{amount})
+	</insert>
+	
+	<delete id="deleteCart" parameterType="int">
+		delete from cart where id=#{id}
+	</delete>
+	
+	<select id="isSameCart" parameterType="CartDTO" resultType="CartDTO">
+		select * from cart where memid=#{memid} and productid=#{productid} and cheory=0
+	</select>
+	
+	<update id="EditSold_Remain" parameterType="CartDTO">
+		update product set sold=sold+#{amount}, remain=remain-#{amount} where id=#{productid}
+	</update>
+	
+	<select id="order_list_by_id" resultType="OrderViewDTO" parameterType="string">
+		select order_.id as id, 
+		if(count(*)>1,concat(product.name, ' 외', count(*)-1,' 건'), product.name) as name,
+		order_.totalprice as price,
+		order_.ordertime as ordertime,
+		order_detail.cheory as cheory
+		from order_ join order_detail
+		on order_.id = order_detail.orderid
+		join product on order_detail.pid = product.id
+		and order_.memid=#{id} and cheory=0
+		group by order_.id
+	</select>
+	
+	<select id="all_order_list_by_id" resultType="OrderViewDTO" parameterType="string">
+		select order_.id as id, 
+		if(count(*)>1,concat(product.name, ' 외', count(*)-1,' 건'), product.name) as name,
+		order_.totalprice as price,
+		order_.ordertime as ordertime,
+		order_detail.cheory as cheory
+		from order_ join order_detail
+		on order_.id = order_detail.orderid
+		join product on order_detail.pid = product.id
+		and order_.memid=#{id}
+		group by order_.id
+	</select>
+	
+	<select id="current_order_title" resultType="OrderViewDTO" parameterType="int">
+		select order_.id as id, 
+		if(count(*)>1,concat(product.name, ' 외', count(*)-1,' 건'), product.name) as name,
+		order_.totalprice as price, order_.ordertime as ordertime,order_.addr as addr,
+		order_detail.cheory as cheory
+		from order_ join order_detail
+		on order_.id = order_detail.orderid
+		join product on order_detail.pid = product.id
+		and order_.id=#{id}
+		group by order_.id
+	</select>
+	
+	<select id="current_order_detail_by_orderid" resultType="CurrentViewDTO" parameterType="int">
+		select product.image as pimage, order_detail.id as id, product.id as pid, product.name as name,
+		product.price as price, order_detail.amount as amount, product.price*order_detail.amount as totalprice,
+		order_.ordertime as ordertime,
+		order_detail.cheory as cheory
+		from order_ join order_detail
+		on order_.id = order_detail.orderid
+		join product on order_detail.pid = product.id
+		and order_.id=#{id}
+	</select>
+	
+	<select id="order_detail_list_by_orderid" resultType="OrderDetailDTO" parameterType="int">
+		select *
+		from order_detail
+		where orderid=#{id}
+	</select>
+	
+	<update id="change_Order_detail_cheory" parameterType="OrderDetailDTO">
+		update order_detail set cheory=#{choery} where orderid=#{orderid}
+	</update>
+	
+	<insert id="add_review" parameterType="ReviewDTO">
+		insert into review(pid, memid, title, content, image)
+		values(#{pid},#{memid},#{title},#{content},#{image})
+	</insert>
+	
+	<update id="change_cheory_for_review" parameterType="int">
+		update order_detail set cheory=2 where id=#{orderdetailid}
+	</update>
+	
+	<select id="review_list" resultType="ReviewDTO">
+		select review.id as id, review.memid, review.pid as pid,
+		review.title as title, review.regtime as regtime,
+		product.image as pimage
+		from review join product
+		on review.pid = product.id
+	</select>
+	
+	<select id="reveiw_detail" resultType="ReviewDTO" parameterType="int">
+		select review.id as id, review.memid as memid, review.pid as pid, review.image as image,
+		review.title as title, review.regtime as regtime, review.content as content, product.image as pimage
+		from review join product
+		on review.pid = product.id
+		and review.id=#{id}
+	</select>
+	
+	<update id="update_Review" parameterType="ReviewDTO">
+		update review set title=#{title}, content=#{content}, image=#{image}
+		where id=#{id}
+	</update>
+	
+	<delete id="delete_Review" parameterType="int">
+		delete from review where id=#{id}
+	</delete>
+	
+	<select id="qna_list_by_id" resultType="QnaDTO" parameterType="String">
+		select * from qna where memid=#{id}
+	</select>
+	
+	<select id="qna_detail" resultType="QnaDTO" parameterType="int">
+		select * from qna where id=#{id}
+	</select>
+	
+	<update id="update_Qna" parameterType="QnaDTO">
+		update qna set title=#{title}, content=#{content} where id=#{id}
+	</update>
+	
+	<delete id="delete_Qna" parameterType="int">
+		delete from qna where id=#{id}
+	</delete>
+	
+	<insert id="qna_write" parameterType="QnaDTO">
+		insert into qna(memid, title, content)
+		values(#{memid},#{title},#{content})
+	</insert>
+	
+	<select id="id_check" parameterType="String" resultType="MemberDTO">
+		select * from member where id=#{id}
+	</select>
+	
+	<update id="update_member" parameterType="MemberDTO">
+		update member set name=#{name}, pwd=#{pwd}, addr=#{addr}
+		where id=#{id}
+	</update>
+</mapper>
