@@ -210,6 +210,16 @@
 	</dependencies>
 	<build>
 		<plugins>
+			
+			<!--google cloud platform-->
+			<plugins>
+			   <plugin>
+			     <groupId>com.google.cloud.tools</groupId>
+			     <artifactId>appengine-maven-plugin</artifactId>
+			     <version>0.1.1-beta</version>
+			  </plugin>
+			</plugins>
+			
 			<plugin>
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<version>2.9</version>
