@@ -18,7 +18,7 @@ margin-top:80px;
 	</div>
 	<center>
 		<input type="button" value="write qna" onclick="location.href='qna_write'">
-		<table>
+		<table style="width:50%;text-align: center">
 			<tr>
 				<th>No.</th>
 				<th>작성자</th>

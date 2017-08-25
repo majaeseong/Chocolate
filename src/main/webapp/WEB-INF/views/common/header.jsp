@@ -102,7 +102,7 @@
 	<div id="nav_menu" class="layer_fixed">
 		<div style="display:inline-block;float:left">
 			<a href="home" style="border-bottom:0px">
-				<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PlayStation_4_logo_and_wordmark.svg/503px-PlayStation_4_logo_and_wordmark.svg.png" style="height:68px">
+				<img src="http://redhookchocolatefactory.com/wp-content/uploads/2017/02/logo-3.png" style="height:68px">
 			</a>
 		</div>
 		
@@ -145,7 +145,12 @@
 		<div style="display:inline-block;right:0;top:3px;position:fixed" class="dropdown">
 
 			<button class="dropbtn">
-				<img src="http://www.freeiconspng.com/uploads/register-secure-security-user-login-icon--7.png" style="height:50px">
+				<c:if test="${loginuser==null }">
+					<img src="http://www.freeiconspng.com/uploads/register-secure-security-user-login-icon--7.png" style="height:50px">
+				</c:if>
+				<c:if test="${loginuser!=null }">
+					<img src="https://image.flaticon.com/icons/svg/119/119067.svg" style="height:50px">
+				</c:if>
 			</button>
 			<div class="dropdown-content">
 			    

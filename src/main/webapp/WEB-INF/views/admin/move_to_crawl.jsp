@@ -16,9 +16,11 @@ margin-top:80px;
 	</div>
 <body>
 	<form method="post" action="crawlpage">
-		KeyWord-> 
-		<input type="text" name="word"> 
-		<input type="submit" value="검색">
+		<center>
+			KeyWord-> 
+			<input type="text" name="word"> 
+			<input type="submit" value="검색">
+		</center>
 	</form>
 </body>
 </html>

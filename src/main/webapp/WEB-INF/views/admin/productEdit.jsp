@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Product Add Page</title>
+<title>Product Edit Page</title>
 <style>
 body{
 margin-top:80px;
@@ -47,7 +47,7 @@ margin-top:80px;
 		    <div class="inner">
 		      <div class="centered">
 		        <fieldset>
-					<legend>Product Add</legend>
+					<legend>Product Edit</legend>
 				        <table>
 						<tr>
 							<th>Product Name</th>

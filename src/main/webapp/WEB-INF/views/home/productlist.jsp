@@ -174,13 +174,15 @@ figure.snip1141:hover i, figure.snip1141.hover i {
 		<jsp:include page="../common/header.jsp" />
 	</div>
 	
-	<form method="post" action="productlist">
-		<input type="hidden" id="keyword2" value="${pdto.keyword}">
-		<input type="text" name="keyword">
-		<input type="submit" value="검색">
-	</form>
-
 	<center>
+		
+		<form method="post" action="productlist">
+			<input type="hidden" id="keyword2" value="${pdto.keyword}">
+			<input type="text" name="keyword">
+			<input type="submit" value="검색">
+		</form>
+
+
 		<%
 			int count = 0;
 		%>

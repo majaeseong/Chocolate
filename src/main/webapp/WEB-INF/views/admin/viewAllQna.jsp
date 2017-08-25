@@ -18,7 +18,7 @@ margin-top:80px;
 	</div>
 	
 	<center>
-		<table>
+		<table style="width:50%;text-align: center">
 			<tr>
 				<th>No.</th>
 				<th>작성자</th>

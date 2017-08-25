@@ -9,21 +9,49 @@
 <style>
 body{
 margin-top:80px;
+overflow: hidden;
 }
-th{
-width:15%;
+.wrapper {
+    width: 100%;
+    height: 600px;
+    overflow-y: scroll;
 }
+table {
+    width: 100%;
+    text-align: center; 
+    border-collapse:collapse; 
+    table-layout: fixed;
+} 
+thead {
+    margin: -1px 0 0 -1px;
+    width: 100%;
+    display: table; 
+    table-layout: fixed;
+    position: absolute;
+    background-color: #ffffff;
+}
+tbody tr:first-child td{
+    padding-top: 32px;
+}
+th, td { 
+    padding: 6px; 
+} 
 </style>
 </head>
 <body>
 	<div>
 		<jsp:include page="../common/header.jsp" />
 	</div>
-	<!-- <form method="post" action="ttest" name="formm"> -->
+	
+
+	<div class="wrapper">
 	<table>
-		<tr>
-			<th>Image</th><th>Title</th><th>content</th><th>price</th><th>total</th><th>category</th>
-		</tr>
+		<thead>
+			<tr>
+				<th>Image</th><th>Title</th><th>content</th><th>price</th><th>total</th><th>category</th>
+			</tr>
+		</thead>
+		<tbody>
 		<c:forEach var="l" items="${list }" varStatus="status">
 			<tr>
 				
@@ -51,39 +79,52 @@ width:15%;
 						<option value="3">스낵</option>
 						<option value="4">케이크</option>
 					</select>
-					<button name="button" onclick="aa(${status.count })">상품 등록</button> 
+					<button name="button" onclick="return reg_item(${status.count })">상품 등록</button> 
 				</td>
 				
 			</tr>
 		</c:forEach>
+		</tbody>
 	</table>
-	<!-- </form> -->
+	</div>
+	
 	
 	<script type="text/javascript">
 		function aa(val){
-			var _url="url"+val;
-			var url = encodeURI(document.getElementById(_url).value);
 			
-			var _name="name"+val;
-			var name = document.getElementById(_name).value;
 			
-			var _content="content"+val;
-			var content = document.getElementById(_content).value;
-			
-			var _price ="price"+val;
-			var price = document.getElementById(_price).value;
-			
-			var _total="total"+val;
-			var total = document.getElementById(_total).value;
-			
-			var _category="category"+val;
-			var category = document.getElementById(_category).value;
+		}
+		
+		function reg_item(val){
+			if (confirm("등록 하시겠습니까?") == true){
+				var _url="url"+val;
+				var url = encodeURI(document.getElementById(_url).value);
+				
+				var _name="name"+val;
+				var name = document.getElementById(_name).value;
+				
+				var _content="content"+val;
+				var content = document.getElementById(_content).value;
+				
+				var _price ="price"+val;
+				var price = document.getElementById(_price).value;
+				
+				var _total="total"+val;
+				var total = document.getElementById(_total).value;
+				
+				var _category="category"+val;
+				var category = document.getElementById(_category).value;
 
-			var lo1="ttest?urld=";
-			var locat = lo1.concat(url,"&name=",name,"&content=",content,"&price=",price,"&total=",total,"&category=",category);
-			
-			location.href = locat;
-			
+				var lo1="crwaladdproduct?urld=";
+				var locat = lo1.concat(url,"&name=",name,"&content=",content,"&price=",price,"&total=",total,"&category=",category);
+				
+				location.href = locat;
+				
+			    return true;
+			}else{ 
+				
+			    return false;
+			}
 		}
 	</script>
 </body>
