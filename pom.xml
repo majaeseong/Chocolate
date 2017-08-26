@@ -192,14 +192,14 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.10.3</version>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2</version>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -209,17 +209,46 @@
 
 	</dependencies>
 	<build>
+
+		<finalName>ROOT.war</finalName>
+
 		<plugins>
-			
-			<!--google cloud platform-->
-			<plugins>
-			   <plugin>
-			     <groupId>com.google.cloud.tools</groupId>
-			     <artifactId>appengine-maven-plugin</artifactId>
-			     <version>0.1.1-beta</version>
-			  </plugin>
-			</plugins>
-			
+
+			<!--google cloud platform -->
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>appengine-maven-plugin</artifactId>
+				<version>0.1.1-beta</version>
+			</plugin>
+
+			<!-- 메이븐을 통한 서버 배포 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<warsourcedirectory>src/main/webapp</warsourcedirectory>
+					<webxml>src/main/webapp/WEB-INF/web.xml</webxml>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<url>http://35.194.187.7:8080/manger/html</url>
+					<path>/jspp</path>
+					<username>admin</username>
+					<password>admin</password>
+				</configuration>
+			</plugin>
+
+			<!-- 로컬에 있는 톰캣에 배포할 경우 서버 IP주소 대신 localhost 입력 -->
+			<!-- 톰캣의 기본 포트번호는 8080 이다. -->
+
+
+
 			<plugin>
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<version>2.9</version>
